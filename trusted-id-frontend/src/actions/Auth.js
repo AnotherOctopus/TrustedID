@@ -1,14 +1,17 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
-async function authenticate(data) {
+// If we are locally testing
+const localTesting = true
+
+async function authenticateInternal(data) {
     try {
-        let response = await fetch ('http://example.com', {
+        let response = await fetch('http://example.com', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({data})
+            body: JSON.stringify({ data })
         })
         let json = await response.json();
         return json;
@@ -17,3 +20,18 @@ async function authenticate(data) {
         return null;
     }
 }
+
+export async function authenticate(data) {
+    if (localTesting) {
+        return {
+            status: 200,
+            data: {
+                privateKey: 'sadflkjasfasf',
+                publicKey: 'sdfsdfsdf',
+            }
+        }
+    } else {
+        return authenticateInternal(data)
+    }
+}
+
