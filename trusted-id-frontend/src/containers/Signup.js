@@ -32,22 +32,22 @@ export default function Signup() {
   }
 
   async function handleSubmit(event) {
-    console.log('form submission data', event);
+    console.log('form submission data', fields);
     event.preventDefault();
 
     setIsLoading(true);
 
     try {
-      const results = await authenticate();
+      const results = await authenticate(fields.name, fields.license);
       console.log('authenticate results: ', results)
-      storeHumanId(results.privateKey, results.publicKey);
+      storeHumanId(results.data.privateKey, results.data.publicKey);
       if (results.errorCode = '200') {
-        alert("HeSuccess");
+        alert("Success");
       }
       setIsLoading(false);
       setNewUser(newUser);
       //do a pop up
-      history.push("/")
+      history.push("/Landing")
     } catch (e) {
       onError(e);
       setIsLoading(false);

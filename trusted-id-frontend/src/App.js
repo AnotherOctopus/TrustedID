@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import './App.css';
 import Routes from "./Routes";
-import { Nav, Navbar, NavItem, Button } from "react-bootstrap";
+import { CookiesProvider } from 'react-cookie';
 import { AppContext } from "./libs/contextLib";
+//import { Nav, Navbar, NavItem, Button } from "react-bootstrap";
 //import { Auth }
 
 // useEffect(() => {
@@ -32,7 +33,9 @@ function App() {
   return (
     <div className="App">
       <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
-        <Routes />
+        <CookiesProvider>
+          <Routes />
+        </CookiesProvider>
       </AppContext.Provider>
     </div>
   );

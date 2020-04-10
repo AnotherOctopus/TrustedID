@@ -11,7 +11,10 @@ async function authenticateInternal(data) {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ data })
+            body: JSON.stringify({
+                name: data.name,
+                license: data.license,
+            })
         })
         let json = await response.json();
         return json;
