@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import {
   FormGroup,
   FormControl,
-  ControlLabel,
+  FormLabel,
   Button
 } from "react-bootstrap";
 import { useAppContext } from "../libs/contextLib";
@@ -61,7 +61,7 @@ export default function Signup() {
     return (
       <form onSubmit={handleSubmit}>
         <FormGroup controlId="name" bsSize="large">
-          <ControlLabel>Full Name</ControlLabel>
+          <FormLabel>Full Name</FormLabel>
           <FormControl
             autoFocus
             type="name"
@@ -70,7 +70,7 @@ export default function Signup() {
           />
         </FormGroup>
         <FormGroup controlId="license" bsSize="large">
-          <ControlLabel>Driver's License</ControlLabel>
+          <FormLabel>Driver's License</FormLabel>
           <FormControl
             type="license"
             value={fields.license}

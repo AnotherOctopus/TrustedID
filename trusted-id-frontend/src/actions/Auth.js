@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import keyEncoder from 'key-encoder';
-import blah from '.../node_modules/@babel/runtime-corejs2/helpers/esm/objectWithoutPropertiesLoose';
+import KeyEncoder from 'key-encoder';
+// import blah from '@babel/runtime/helpers/es6/objectWithoutProperties'
 //https://www.npmjs.com/package/key-encoder
 
 // If we are locally testing
 const localTesting = false
 
+const keyEncoder = new KeyEncoder('secp256k1')
+
 async function authenticateInternal(data) {
+
+    console.log('data in authenticate internal', data)
 
     let govPublic = keyEncoder.encodePublic(data.govPublic, 'raw', 'pem')
     try {
