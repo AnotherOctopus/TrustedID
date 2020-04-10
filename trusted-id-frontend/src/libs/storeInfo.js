@@ -4,12 +4,13 @@ import { Cookies } from 'react-cookie'
 //https://www.npmjs.com/package/react-cookie
 //https://github.com/juliangruber/keypair
 
-export function storeHumanId(govPublic, govPrivate) {
+export function createHumanId() {
     // const [cookies, setCookie, removeCookie] = useCookies(['PII'])
     const cookies = new Cookies()
 
-    cookies.set('govPublic', govPublic)
-    cookies.set('govPrivate', govPrivate)
+    const gov = createId()
+    cookies.set('govPublic', gov.public)
+    cookies.set('govPrivate', gov.private)
 
     const health = createId()
     cookies.set('healthPublic', health.public)

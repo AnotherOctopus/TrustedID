@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import {
   FormGroup,
   FormControl,
-  FormLabel,
+  ControlLabel,
   Button
 } from "react-bootstrap";
 import { useAppContext } from "../libs/contextLib";
@@ -11,8 +11,9 @@ import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
 import "./Signup.css";
 import { authenticate } from "../actions/Auth";
-import { storeHumanId } from "../libs/storeInfo";
+import { createHumanId } from "../libs/storeInfo";
 import styles from "./button.css";
+import { Cookies } from 'react-cookie'
 
 export default function Signup() {
   const [fields, handleFieldChange] = useFormFields({
@@ -38,9 +39,11 @@ export default function Signup() {
     setIsLoading(true);
 
     try {
-      const results = await authenticate(fields.name, fields.license);
+      const cookies = new Cookies()
+      createHumanId();
+      const govPublic = cookies.get('govPrivate');
+      const results = await authenticate(fields.name, fields.license, govPublic);
       console.log('authenticate results: ', results)
-      storeHumanId(results.data.privateKey, results.data.publicKey);
       if (results.errorCode = '200') {
         alert("Success");
       }
@@ -58,7 +61,7 @@ export default function Signup() {
     return (
       <form onSubmit={handleSubmit}>
         <FormGroup controlId="name" bsSize="large">
-          <FormLabel>Full Name</FormLabel>
+          <ControlLabel>Full Name</ControlLabel>
           <FormControl
             autoFocus
             type="name"
@@ -67,7 +70,7 @@ export default function Signup() {
           />
         </FormGroup>
         <FormGroup controlId="license" bsSize="large">
-          <FormLabel>Driver's License</FormLabel>
+          <ControlLabel>Driver's License</ControlLabel>
           <FormControl
             type="license"
             value={fields.license}
