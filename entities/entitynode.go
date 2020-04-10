@@ -47,7 +47,7 @@ func (b Block) Dump() []byte{
 	blocknum  := make([]byte, 2)
 	numlines  := make([]byte, 2)
     binary.LittleEndian.PutUint32(blocksize, b.blocksize)
-    binary.LittleEndian.PutUint32(certlen,b.certlen)
+    binary.LittleEndian.PutUint16(certlen,b.certlen)
     binary.LittleEndian.PutUint16(hashlen, b.hashlen)
     binary.LittleEndian.PutUint16(timestamp, b.timestamp)
     binary.LittleEndian.PutUint16(blocknum, b.blocknum)
@@ -92,11 +92,8 @@ func LoadBlockChain(raw []byte) BlockChain {
 	return bc
 }
 func LoadBlock(raw []byte) Block {
-	var idx int
-	blocksize := binary.LittleEndian.Uint32(raw[0:3])
-	certlen   := binary.LittleEndian.Uint32(raw[4:7])
-	rawcert	  := raw[8:8 + certlen]
-	idx = idx + certlen
+	var blk Block
+	return blk
 }
 // GetHandler handles the index route
 func getcert(w http.ResponseWriter, r *http.Request) {
