@@ -18,7 +18,7 @@ import generateApprovalToken from '../libs/generateApprovalToken'
 
 //to do - encrypt with govPrivate
 
-const testingMode = true;
+const testingMode = false;
 const cookies = new Cookies()
 
 const style = {
@@ -28,18 +28,18 @@ const style = {
 
 function CreateHealthQR() {
     let approvalToken = "";
-    // approvalToken = cookies.get('govCertificate') + generateApprovalToken("health");
-    let hospitalPublic = ""
-    if (testingMode) {
-        hospitalPublic = "sdfsdfsdfsdfsdf";
-    } else { hospitalPublic = cookies.get('hospitalPublic') };
+    approvalToken = cookies.get('govCertificate') + generateApprovalToken("health");
+    // let hospitalPublic = ""
+    // if (testingMode) {
+    //     hospitalPublic = "sdfsdfsdfsdfsdf";
+    // } else { hospitalPublic = cookies.get('hospitalPublic') };
 
-    const govPublic = cookies.get('govPublic')
-    const healthPublic = cookies.get('healthPublic')
+    // const govPublic = cookies.get('govPublic')
+    // const healthPublic = cookies.get('healthPublic')
 
-    approvalToken = healthPublic + hospitalPublic + govPublic;
+    // approvalToken = healthPublic + hospitalPublic + govPublic;
 
-    return <QRCode style={style} value={approvalToken} />
+    return <QRCode size={250} style={style} value={approvalToken} />
 
 }
 
@@ -59,7 +59,7 @@ function CreateWorkQR() {
     approvalToken = workPublic + companyPublic + govPublic;
 
 
-    return <QRCode style={style} value={approvalToken} />
+    return <QRCode size={250} style={style} value={approvalToken} />
 
 }
 

@@ -1,11 +1,17 @@
-import { getHospital } from '../actions/Hospital.js';
-import { RSA } from 'react-native-rsa-native';
-import { Cookies } from 'react-cookie'
+import { getHospitalCertificate } from '../actions/Hospital.js';
+import { Cookies } from 'react-cookie';
+import JSEncrypt from 'jsencrypt';
+import { sha256 } from 'js-sha256';
+
+//https://www.npmjs.com/package/js-sha256
+// import pidcrypt from 'pidCrypt';
+//import { RSA } from 'react-native-rsa-native';
+//https://github.com/travist/jsencrypt
 
 //https://www.npmjs.com/package/js-sha256
 //need to save hospitalpublic to cookies
 
-const testingMode = true;
+const testingMode = false;
 
 if (testingMode) {
     const governmentPublic = `-----BEGIN PUBLIC KEY-----
@@ -21,19 +27,25 @@ if (testingMode) {
     //to be written
 }
 
-function confirmHospitalCertificate() {
+export function confirmHospitalCertificate() {
     const cookies = new Cookies();
-    const decryptedCertificate = "";
-    const hashedHospitalPublic = "";
-    const { hospitalPublic, hospitalCertificate } = getHospital();
+    let decryptedCertificate = "";
+    let hashedHospitalPublic = "";
+    let hospitalPublic = "";
+    let hospitalCertificate = "";
+    hospitalPublic = getHospitalCertificate();
     console.log("hospitalPublic: ", hospitalPublic);
     console.log("hospitalCertificate", hospitalCertificate);
-    decryptedCertificate = RSA.decrypt(hospitalCertificate, governmentPublic);
-    console.log("decryptedCertificate", decryptedCertificate)
-    hashedHospitalPublic = sha256(hospitalPublic);
-    console.log("hashedHospitalPublic", hashedHospitalPublic)
-    if (decryptedCertificate === hashedHospitalPublic) {
 
+    // let verify = new JSEncrypt();
+    // verify.setPublicKey(hospitalPublic);
+    // decryptedCertificate = verify.verify(hospitalCertificate, sha256());
+    // console.log("decryptedCertificate", decryptedCertificate)
+
+    // hashedHospitalPublic = sha256(hospitalPublic);
+    // console.log("hashedHospitalPublic", hashedHospitalPublic)
+    if (decryptedCertificate === hospitalPublic) {
+        //below can probably be more efficient and happen earlier
         if (cookies.get('hospitalPublic') === hospitalPublic) {
             return true
         } else {
@@ -44,4 +56,39 @@ function confirmHospitalCertificate() {
         return false
     }
 }
+
+// export async function confirmHospitalCertificate() {
+//     //console.log('form submission data', fields);
+
+//     try {
+//         const cookies = new Cookies();
+//         let decryptedCertificate = "";
+//         let hashedHospitalPublic = "";
+//         const { hospitalPublic, hospitalCertificate } = await getHospitalCertificate();
+//       //console.log("results: ", results);
+//       console.log("hospitalPublic: ", hospitalPublic);
+//       console.log("hospitalCertificate", hospitalCertificate);
+
+//     let verify = new JSEncrypt();
+//     verify.setPublicKey(hospitalPublic);
+//     decryptedCertificate = verify.verify(hospitalCertificate, sha256());
+
+//     console.log("decryptedCertificate", decryptedCertificate)
+//     // hashedHospitalPublic = sha256(hospitalPublic);
+//     // console.log("hashedHospitalPublic", hashedHospitalPublic)
+//     if (decryptedCertificate === hospitalPublic) {
+//         //below can probably be more efficient and happen earlier
+//         if (cookies.get('hospitalPublic') === hospitalPublic) {
+//             return true
+//         } else {
+//             cookies.set('hospitalPublic', hospitalPublic);
+//             return true
+//         }
+//     } else {
+//         return false
+//     }
+//     } catch (e) {
+//       console.log(e);
+//     }
+// }
 

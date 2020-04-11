@@ -5,23 +5,19 @@ import React, { useState } from 'react';
 // If we are locally testing
 const localTesting = false
 
-//const keyEncoder = new KeyEncoder('secp256k1')
-
-async function authenticateInternal(name, license, hpub) {
+async function getHospitalTestInternal(patientNumber) {
 
     //console.log('authenticate internal gov public:', hpub)
     //console.log('name:', name, 'license:', license, 'hpub:', hpub)
     try {
-        const response = await fetch('http://ec2-3-87-206-167.compute-1.amazonaws.com/newuser', {
+        const response = await fetch('http://ec2-3-87-206-167.compute-1.amazonaws.com/req', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: name,
-                license: license,
-                hpub: hpub,
+                patientNumber: patientNumber,
             })
         }).then(result => result.text());
         console.log('Response: ', response);
@@ -32,7 +28,7 @@ async function authenticateInternal(name, license, hpub) {
     }
 }
 
-export async function authenticate(name, license, govPublic) {
+export async function getHospitalTest(patientNumber) {
     if (localTesting) {
         return {
             status: 200,
@@ -41,7 +37,7 @@ export async function authenticate(name, license, govPublic) {
             }
         }
     } else {
-        return authenticateInternal(name, license, govPublic)
+        return getHospitalTestInternal(patientNumber)
     }
 }
 

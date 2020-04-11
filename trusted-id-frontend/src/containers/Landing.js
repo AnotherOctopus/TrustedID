@@ -6,6 +6,7 @@ import "./button.css";
 import "./Landing.css";
 import returnQR from "../components/QR-Generator";
 import QrReader from 'react-qr-reader';
+import { getAndSendTestResult } from '../libs/getAndSendTestResult';
 
 //https://www.npmjs.com/package/react-qr-reader
 
@@ -47,7 +48,8 @@ export default function Landing() {
 
     function handleChange(event) {
         //change the status
-        console.log(event.target.value);
+        //test employee number, need to create an input form field
+        getAndSendTestResult('1944');
         setQrType(event.target.value);
     }
 

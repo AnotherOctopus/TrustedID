@@ -1,27 +1,22 @@
 import React, { useState } from 'react';
+import { saveHospitalTest } from '../libs/saveHospitalTest';
 //import KeyEncoder from 'key-encoder';
 //https://www.npmjs.com/package/key-encoder
 
 // If we are locally testing
-const localTesting = false
+const localTesting = true
 
-//const keyEncoder = new KeyEncoder('secp256k1')
+async function sendEncryptedTestResultInternal(encryptedTestResult) {
 
-async function authenticateInternal(name, license, hpub) {
-
-    //console.log('authenticate internal gov public:', hpub)
-    //console.log('name:', name, 'license:', license, 'hpub:', hpub)
     try {
-        const response = await fetch('http://ec2-3-87-206-167.compute-1.amazonaws.com/newuser', {
+        const response = await fetch('http://ec2-3-87-206-167.compute-1.amazonaws.com/confirm', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: name,
-                license: license,
-                hpub: hpub,
+                encryptedTestResult: encryptedTestResult,
             })
         }).then(result => result.text());
         console.log('Response: ', response);
@@ -32,16 +27,16 @@ async function authenticateInternal(name, license, hpub) {
     }
 }
 
-export async function authenticate(name, license, govPublic) {
+export async function sendEncryptedTestResult(encryptedTestResult) {
     if (localTesting) {
         return {
             status: 200,
             data: {
-                publicKey: 'sdfsdfsdf',
+                encryptedTestResult: 'sdfsdfsdf',
             }
         }
     } else {
-        return authenticateInternal(name, license, govPublic)
+        return sendEncryptedTestResultInternal(encryptedTestResult)
     }
 }
 

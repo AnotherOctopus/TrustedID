@@ -1,34 +1,32 @@
-import { RSA } from 'react-native-rsa-native';
 import { Cookies } from 'react-cookie';
-import { saveHospital } from 'saveHospital';
+//replace below with test certificate
+//import { confirmHospitalCertificate } from './saveHospital';
+import JSEncrypt from 'jsencrypt';
+import { sha256 } from 'js-sha256';
 //https://www.npmjs.com/package/react-native-rsa-native
 
 let testing = true;
 
 export function generateHealthToken() {
     const cookies = new Cookies();
+    let encrypt = new JSEncrypt();
     let token = "";
 
-    saveHospital();
-
-    token = cookies.get('hospitalPublic') + cookies.get('healthPublic');
-
-    console.log('token before encryption: ', token);
-
+    //this should really be changed to the doctorsNote, not hospital certificate
     //the below ensures that the recipient has gotten the govPublic from the person and so 
     //has approval to read
-    token = RSA.encrypt(token, cookies.get('govPrivate'));
-
+    encrypt.setPrivateKey(cookies.get('govPrivate'));
+    token = encrypt.encrypt(cookies.get('hospitalPublic'))// + encrypt.encrypt(cookies.get('healthPublic'));
     console.log('token after encryption: ', token);
 
     return token
 }
 
 export function generateWorkToken() {
+    //needs to updated to reflect changes above
     const cookies = new Cookies();
     let token = "";
-
-    saveHospital();
+    let encrypt = new JSEncrypt();
 
     let workPublic = ""
 
@@ -42,7 +40,8 @@ export function generateWorkToken() {
 
     console.log('token before encryption: ', token);
 
-    token = RSA.encrypt(token, cookies.get('govPrivate'));
+    encrypt.setPrivateKey(cookies.get('govPrivate'));
+    token = encrypt.encrypt(token);
 
     console.log('token after encryption: ', token);
 
