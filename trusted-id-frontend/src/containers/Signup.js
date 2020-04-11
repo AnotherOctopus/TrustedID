@@ -33,7 +33,7 @@ export default function Signup() {
   }
 
   async function handleSubmit(event) {
-    console.log('form submission data', fields);
+    //console.log('form submission data', fields);
     event.preventDefault();
 
     setIsLoading(true);
@@ -41,12 +41,11 @@ export default function Signup() {
     try {
       const cookies = new Cookies()
       createHumanId();
-      const govPublic = cookies.get('govPrivate');
+      const govPublic = cookies.get('govPublic');
+      //console.log('govPublic:', govPublic)
       const results = await authenticate(fields.name, fields.license, govPublic);
-      console.log('authenticate results: ', results)
-      if (results.errorCode = '200') {
-        alert("Success");
-      }
+      //console.log("results: ", results);
+      cookies.set('govCertificate', results);
       setIsLoading(false);
       setNewUser(newUser);
       //do a pop up

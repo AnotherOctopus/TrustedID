@@ -23,7 +23,5 @@ export function createHumanId() {
 
 function createId() {
     var pair = keypair();
-    console.log('public key: ', pair.public)
-    console.log('private key: ', pair.private)
     return pair
 }

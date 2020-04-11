@@ -3,9 +3,12 @@
 
 import { withCookies, Cookies } from 'react-cookie';
 import React, { useState } from 'react';
-import { setStatus } from "../libs/setStatus";
+//import { setStatus } from "../libs/setStatus";
 import sha256 from 'crypto-js/sha256';
 import QRCode from 'qrcode.react';
+
+import generateApprovalToken from '../libs/generateApprovalToken'
+//import QrReader from 'react-qr-reader';
 
 //Frontend: 
 // QR code contains the following information:
@@ -19,18 +22,17 @@ const testingMode = true;
 const cookies = new Cookies()
 
 function CreateHealthQR() {
-
     let approvalToken = "";
-
+    // approvalToken = cookies.get('govCertificate') + generateApprovalToken("health");
+    let hospitalPublic = ""
     if (testingMode) {
-        setStatus();
-    } else { };
-    const govPrivate = cookies.get('govPrivate')
+        hospitalPublic = "sdfsdfsdfsdfsdf";
+    } else { hospitalPublic = cookies.get('hospitalPublic') };
 
+    const govPublic = cookies.get('govPublic')
     const healthPublic = cookies.get('healthPublic')
-    const doctorPublic = cookies.get('doctorPublic')
 
-    approvalToken = healthPublic + doctorPublic + govPrivate;
+    approvalToken = healthPublic + hospitalPublic + govPublic;
 
     return <QRCode value={approvalToken} />
 
@@ -39,17 +41,18 @@ function CreateHealthQR() {
 function CreateWorkQR() {
 
     let approvalToken = "";
+    // approvalToken = cookies.get('govCertificate') + generateApprovalToken("work");
 
+    let companyPublic = ""
     if (testingMode) {
-        setStatus();
-    } else { };
+        companyPublic = "sdfsdfsdfsdfsdf";
+    } else { companyPublic = cookies.get('companyPublic') };
 
-    const govPrivate = cookies.get('govPrivate')
-
+    const govPublic = cookies.get('govPublic')
     const workPublic = cookies.get('workPublic')
-    const companyPublic = cookies.get('companyPublic')
 
-    approvalToken = workPublic + companyPublic + govPrivate;
+    approvalToken = workPublic + companyPublic + govPublic;
+
 
     return <QRCode value={approvalToken} />
 
