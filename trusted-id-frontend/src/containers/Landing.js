@@ -24,7 +24,7 @@ class ScanQR extends Component {
                 result: data
             })
 
-            confirmScan(data);
+            // confirmScan(data);
         }
     }
     handleError = err => {
@@ -40,7 +40,7 @@ class ScanQR extends Component {
                     onScan={this.handleScan}
                     style={{ width: '290px'}}
                 />
-                {/* <p>{this.state.result}</p> */}
+                <p>{this.state.result}</p>
             </div>
         )
     }
