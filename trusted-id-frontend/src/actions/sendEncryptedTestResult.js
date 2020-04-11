@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { saveHospitalTest } from '../libs/saveHospitalTest';
+import { saveHospitalTest } from '../libs/saveTestResult';
 //import KeyEncoder from 'key-encoder';
 //https://www.npmjs.com/package/key-encoder
 

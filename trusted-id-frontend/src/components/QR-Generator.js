@@ -21,8 +21,8 @@ const testingMode = false;
 const cookies = new Cookies()
 
 const style = {
-    width: '250px',
-    height: '250px',
+    width: '290px',
+    height: '290px',
 }
 
 function CreateHealthQR() {
@@ -51,15 +51,6 @@ function CreateCertificateQR() {
 export default function returnQR(request) {
     let result = "";
 
-    if (request === "health") {
-        result = <CreateHealthQR />;
-    } else if (request === "work") {
-        result = <CreateWorkQR />;
-    } else if (request === "certificate"){
-        result = <CreateCertificateQR />
-    } else {
-        result = "Incorrect";
-    }
-
-    return result;
+    const approvalToken = JSON.stringify(generateApprovalToken(request));
+    return <QRCode size={250} style={style} value={approvalToken} />
 }

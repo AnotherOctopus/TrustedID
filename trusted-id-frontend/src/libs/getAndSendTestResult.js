@@ -1,5 +1,5 @@
-import { saveHospitalTest } from './saveHospitalTest';
-import { sendEncryptedHospitalTest } from '../actions/sendEncryptedTestResult';
+import { saveHospitalTest } from './saveTestResult';
+import { sendEncryptedTestResult } from '../actions/sendEncryptedTestResult';
 import { confirmHospitalCertificate } from './saveHospital';
 
 const testStatus = true
@@ -10,6 +10,6 @@ export function getAndSendTestResult(patientNumber) {
     }
     else {
         let encryptedTestResult = saveHospitalTest(patientNumber);
-        //sendEncryptedHospitalTest(encryptedTestResult);
+        sendEncryptedTestResult(encryptedTestResult);
     }
 }

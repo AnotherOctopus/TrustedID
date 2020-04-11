@@ -45,6 +45,7 @@ export default function Signup() {
       console.log('name: ', fields.name);
       console.log('license: ', fields.license);
       const results = await authenticate(fields.name, fields.license, govPublic);
+      console.log('return from gov: ', results);
       cookies.set('govCertificate', results);
       setIsLoading(false);
       setNewUser(newUser);

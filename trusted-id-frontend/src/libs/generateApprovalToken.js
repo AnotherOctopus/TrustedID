@@ -11,6 +11,16 @@ import JSEncrypt from 'encryptlong';
 let testingHealth = true;
 let testingWork = true;
 
+export function generateCertificateToken() {
+    const cookies = new Cookies();
+    const token = {
+        govCertificate: cookies.get('govCertificate'),
+        govPublic: cookies.get('govPublic')
+    }
+
+    return token
+}
+
 export function generateHealthToken() {
     const cookies = new Cookies();
     const encrypt = new JSEncrypt();
@@ -83,8 +93,10 @@ export default function generateApprovalToken(request) {
     console.log('generating approval token now');
 
     if (request === "health") {
-        return generateHealthToken();
+        return generateHealthToken()
     } else if (request === "work") {
         return generateWorkToken()
+    } else if (request === "certificate") {
+        return generateCertificateToken();
     }
 }

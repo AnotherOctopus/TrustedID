@@ -7,6 +7,7 @@ import "./Landing.css";
 import returnQR from "../components/QR-Generator";
 import QrReader from 'react-qr-reader';
 import { getAndSendTestResult } from '../libs/getAndSendTestResult';
+import confirmScan from '../libs/confirmScannedCertificate';
 
 //https://www.npmjs.com/package/react-qr-reader
 
@@ -18,9 +19,12 @@ class ScanQR extends Component {
 
     handleScan = data => {
         if (data) {
+            console.log("Handle Scan called with data:", data)
             this.setState({
                 result: data
             })
+
+            confirmScan(data);
         }
     }
     handleError = err => {
@@ -34,9 +38,9 @@ class ScanQR extends Component {
                     delay={300}
                     onError={this.handleError}
                     onScan={this.handleScan}
-                    style={{ width: '100%'}}
+                    style={{ width: '290px'}}
                 />
-                <p>{this.state.result}</p>
+                {/* <p>{this.state.result}</p> */}
             </div>
         )
     }
@@ -47,15 +51,19 @@ export default function Landing() {
     let result = "";
 
     function handleChange(event) {
-        //change the status
-        //test employee number, need to create an input form field
-        //getAndSendTestResult('1944');
         setQrType(event.target.value);
     }
 
-    function renderPage() {
+    function handleRequest(event) {
+        //change the status
+        //test employee number, need to create an input form field
+        getAndSendTestResult('1944');
+    }
+
+    function buttonMenu() {
         return (
-            <ButtonGroup size="lg">
+            <ButtonGroup size="med">
+                <Button variant="secondary" onClick={handleChange} value="certificate">Certificate</Button>
                 <Button variant="secondary" onClick={handleChange} value="health">Health</Button>
                 <Button variant="secondary" onClick={handleChange} value="work">Work</Button>
                 <Button variant="secondary" onClick={handleChange} value="camera">Camera</Button>
@@ -63,30 +71,32 @@ export default function Landing() {
         );
     }
 
+    function requestMenu() {
+        return (
+            <Button size="lg" 
+            variant="secondary" 
+            onClick={handleRequest} 
+            value="testResult">
+                Request Test Results
+            </Button>
+        )
+    }
+
     function qrOrWebcam() {
         let result = ""
-        if (qrType === "health") {
-            result = returnQR(qrType);
-        } else if (qrType === "work") {
+        if (qrType === "health" || qrType === "work" || qrType === "certificate") {
             result = returnQR(qrType);
         } else {
-            //result = <WebcamCapture />;
             result = <ScanQR />
         }
         return result
     }
 
-    function certificateQr() {
-        returnQR("certificate");
-    }
-
     return (
         <div className='main'>
-            <div className="menu">{renderPage()}</div>
+            <div className="menu">{buttonMenu()}</div>
             <div className="content">{qrOrWebcam()}</div>
-            <div className="certificate">{certificateQr()}</div>
+            <div className="menu">{requestMenu()}</div>
         </div>
     );
 }
-
-//{returnQR(qrType)}
