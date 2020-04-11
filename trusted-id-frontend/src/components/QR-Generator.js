@@ -15,7 +15,6 @@ import generateApprovalToken from '../libs/generateApprovalToken'
 // healthPublic or workPublic encrypted by govPrivate
 //as well as either companyPublic or doctorPublic (depending on code) 
 //and HPubl
-
 //to do - encrypt with govPrivate
 
 const testingMode = false;
@@ -27,39 +26,25 @@ const style = {
 }
 
 function CreateHealthQR() {
-    let approvalToken = "";
-    approvalToken = cookies.get('govCertificate') + generateApprovalToken("health");
-    // let hospitalPublic = ""
-    // if (testingMode) {
-    //     hospitalPublic = "sdfsdfsdfsdfsdf";
-    // } else { hospitalPublic = cookies.get('hospitalPublic') };
-
-    // const govPublic = cookies.get('govPublic')
-    // const healthPublic = cookies.get('healthPublic')
-
-    // approvalToken = healthPublic + hospitalPublic + govPublic;
+    const approvalToken = JSON.stringify(generateApprovalToken("health"));
 
     return <QRCode size={250} style={style} value={approvalToken} />
 
 }
 
 function CreateWorkQR() {
-
-    let approvalToken = "";
-    // approvalToken = cookies.get('govCertificate') + generateApprovalToken("work");
-
-    let companyPublic = ""
-    if (testingMode) {
-        companyPublic = "sdfsdfsdfsdfsdf";
-    } else { companyPublic = cookies.get('companyPublic') };
-
-    const govPublic = cookies.get('govPublic')
-    const workPublic = cookies.get('workPublic')
-
-    approvalToken = workPublic + companyPublic + govPublic;
-
+    const approvalToken = JSON.stringify(generateApprovalToken("work"));
 
     return <QRCode size={250} style={style} value={approvalToken} />
+
+}
+
+function CreateCertificateQR() {
+    //commenting the below as the api endpoint is down
+    //const certificate = cookies.get('govCertificate');
+    console.log("createCertificate Called")
+    const certificate = "TESTING TESTING TESTING";
+    return <QRCode size={250} style={style} value={certificate} />
 
 }
 
@@ -70,6 +55,8 @@ export default function returnQR(request) {
         result = <CreateHealthQR />;
     } else if (request === "work") {
         result = <CreateWorkQR />;
+    } else if (request === "certificate"){
+        result = <CreateCertificateQR />
     } else {
         result = "Incorrect";
     }

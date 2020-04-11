@@ -49,7 +49,7 @@ export default function Landing() {
     function handleChange(event) {
         //change the status
         //test employee number, need to create an input form field
-        getAndSendTestResult('1944');
+        //getAndSendTestResult('1944');
         setQrType(event.target.value);
     }
 
@@ -76,10 +76,15 @@ export default function Landing() {
         return result
     }
 
+    function certificateQr() {
+        returnQR("certificate");
+    }
+
     return (
         <div className='main'>
             <div className="menu">{renderPage()}</div>
             <div className="content">{qrOrWebcam()}</div>
+            <div className="certificate">{certificateQr()}</div>
         </div>
     );
 }

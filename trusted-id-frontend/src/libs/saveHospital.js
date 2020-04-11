@@ -13,8 +13,10 @@ import { sha256 } from 'js-sha256';
 
 const testingMode = false;
 
+let governmentPublic = "";
+
 if (testingMode) {
-    const governmentPublic = `-----BEGIN PUBLIC KEY-----
+    governmentPublic = `-----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzixh4JHQ9LSByOnIoO8c
     B5o9c / NUDBNodts7pFwur6cQQvrGwdaLn8dn6qRWE8Htwu9xKLlfPXkE + 6OaNN8F
     yQ03ZBnDp7dvffczpJrt1ayzFn3X5PvDVnOiDafrkgcsnSnKWnmwAjItjUMQvvIV
@@ -27,53 +29,21 @@ if (testingMode) {
     //to be written
 }
 
-export function confirmHospitalCertificate() {
-    const cookies = new Cookies();
-    let decryptedCertificate = "";
-    let hashedHospitalPublic = "";
-    let hospitalPublic = "";
-    let hospitalCertificate = "";
-    hospitalPublic = getHospitalCertificate();
-    console.log("hospitalPublic: ", hospitalPublic);
-    console.log("hospitalCertificate", hospitalCertificate);
+// export function confirmHospitalCertificate() {
+//     const cookies = new Cookies();
+//     let decryptedCertificate = "";
+//     let hashedHospitalPublic = "";
+//     let hospitalPublic = "";
+//     let hospitalCertificate = "";
+//     hospitalPublic = getHospitalCertificate();
+//     console.log("hospitalPublic: ", hospitalPublic);
+//     console.log("hospitalCertificate", hospitalCertificate);
 
-    // let verify = new JSEncrypt();
-    // verify.setPublicKey(hospitalPublic);
-    // decryptedCertificate = verify.verify(hospitalCertificate, sha256());
-    // console.log("decryptedCertificate", decryptedCertificate)
+//     // let verify = new JSEncrypt();
+//     // verify.setPublicKey(hospitalPublic);
+//     // decryptedCertificate = verify.verify(hospitalCertificate, sha256());
+//     // console.log("decryptedCertificate", decryptedCertificate)
 
-    // hashedHospitalPublic = sha256(hospitalPublic);
-    // console.log("hashedHospitalPublic", hashedHospitalPublic)
-    if (decryptedCertificate === hospitalPublic) {
-        //below can probably be more efficient and happen earlier
-        if (cookies.get('hospitalPublic') === hospitalPublic) {
-            return true
-        } else {
-            cookies.set('hospitalPublic', hospitalPublic);
-            return true
-        }
-    } else {
-        return false
-    }
-}
-
-// export async function confirmHospitalCertificate() {
-//     //console.log('form submission data', fields);
-
-//     try {
-//         const cookies = new Cookies();
-//         let decryptedCertificate = "";
-//         let hashedHospitalPublic = "";
-//         const { hospitalPublic, hospitalCertificate } = await getHospitalCertificate();
-//       //console.log("results: ", results);
-//       console.log("hospitalPublic: ", hospitalPublic);
-//       console.log("hospitalCertificate", hospitalCertificate);
-
-//     let verify = new JSEncrypt();
-//     verify.setPublicKey(hospitalPublic);
-//     decryptedCertificate = verify.verify(hospitalCertificate, sha256());
-
-//     console.log("decryptedCertificate", decryptedCertificate)
 //     // hashedHospitalPublic = sha256(hospitalPublic);
 //     // console.log("hashedHospitalPublic", hashedHospitalPublic)
 //     if (decryptedCertificate === hospitalPublic) {
@@ -87,8 +57,44 @@ export function confirmHospitalCertificate() {
 //     } else {
 //         return false
 //     }
-//     } catch (e) {
-//       console.log(e);
-//     }
 // }
+
+export async function confirmHospitalCertificate() {
+    //console.log('form submission data', fields);
+
+    try {
+        const cookies = new Cookies();
+        let decryptedCertificate = "";
+        let hashedHospitalPublic = "";
+        const { pubkey, cert } = await getHospitalCertificate();
+        const hospitalPublic = pubkey;
+        const hospitalCertificate = cert;
+      console.log("hospitalPublic: ", hospitalPublic);
+      console.log("hospitalCertificate", hospitalCertificate);
+
+    let verify = new JSEncrypt();
+
+    //decrypted hospitalCertificate should match a hashed hospital publicKey
+    //decrypt the certification with governmentPublic
+    verify.setPublicKey(governmentPublic);
+    decryptedCertificate = verify.decrypt(hospitalCertificate);
+
+    console.log("decryptedCertificate", decryptedCertificate)
+    // hashedHospitalPublic = sha256(hospitalPublic);
+    // console.log("hashedHospitalPublic", hashedHospitalPublic)
+    if (decryptedCertificate === hospitalPublic) {
+        //below can probably be more efficient and happen earlier
+        if (cookies.get('hospitalPublic') === hospitalPublic) {
+            return true
+        } else {
+            cookies.set('hospitalPublic', hospitalPublic);
+            return true
+        }
+    } else {
+        return false
+    }
+    } catch (e) {
+      console.log(e);
+    }
+}
 

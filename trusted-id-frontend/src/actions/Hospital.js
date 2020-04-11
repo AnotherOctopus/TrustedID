@@ -10,7 +10,6 @@ async function getHospitalCertificateInternal() {
         const response = await fetch('http://ec2-54-196-126-174.compute-1.amazonaws.com/', {
             method: 'GET'
         }).then(result => result.json());
-        console.log('Hospital Response: ', response);
         return response
     } catch (error) {
         console.error('Failure: ', error);
@@ -22,8 +21,8 @@ export async function getHospitalCertificate() {
         return {
             status: 200,
             data: {
-                hospitalPublic: 'sdfsdfsdf',
-                hospitalCertificate: 'sdfsdf',
+                pubkey: 'sdfsdfsdf',
+                cert: 'sdfsdf',
             }
         }
     } else {

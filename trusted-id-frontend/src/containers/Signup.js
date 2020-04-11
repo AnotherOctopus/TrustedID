@@ -42,9 +42,9 @@ export default function Signup() {
       const cookies = new Cookies()
       createHumanId();
       const govPublic = cookies.get('govPublic');
-      //console.log('govPublic:', govPublic)
+      console.log('name: ', fields.name);
+      console.log('license: ', fields.license);
       const results = await authenticate(fields.name, fields.license, govPublic);
-      //console.log("results: ", results);
       cookies.set('govCertificate', results);
       setIsLoading(false);
       setNewUser(newUser);

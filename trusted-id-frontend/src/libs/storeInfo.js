@@ -19,6 +19,11 @@ export function createHumanId() {
     const work = createId()
     cookies.set('workPublic', work.public)
     cookies.set('workPrivate', work.private)
+
+    console.log('Keys created and saved in cookie.')
+    console.log('Gov: ', gov)
+    console.log('Health: ', health);
+    console.log('Work: ', work);
 }
 
 function createId() {

@@ -24,7 +24,7 @@ async function authenticateInternal(name, license, hpub) {
                 hpub: hpub,
             })
         }).then(result => result.text());
-        console.log('Response: ', response);
+        console.log('Certification received from Gov: ', response);
 
         return response
     } catch (error) {
