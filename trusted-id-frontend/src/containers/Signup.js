@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import {
-  HelpBlock,
   FormGroup,
   FormControl,
-  ControlLabel,
+  FormLabel,
   Button
 } from "react-bootstrap";
 import { useAppContext } from "../libs/contextLib";
@@ -12,7 +11,9 @@ import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
 import "./Signup.css";
 import { authenticate } from "../actions/Auth";
-import { storeHumanId } from "../libs/storeInf";
+import { createHumanId } from "../libs/storeInfo";
+import styles from "./button.css";
+import { Cookies } from 'react-cookie'
 
 export default function Signup() {
   const [fields, handleFieldChange] = useFormFields({
@@ -32,35 +33,35 @@ export default function Signup() {
   }
 
   async function handleSubmit(event) {
-    console.log('form submission data', event);
+    //console.log('form submission data', fields);
     event.preventDefault();
 
     setIsLoading(true);
 
     try {
-      const results = await authenticate();
-      storeHumanId(results);
+      const cookies = new Cookies()
+      createHumanId();
+      const govPublic = cookies.get('govPublic');
+      console.log('name: ', fields.name);
+      console.log('license: ', fields.license);
+      const results = await authenticate(fields.name, fields.license, govPublic);
+      console.log('return from gov: ', results);
+      cookies.set('govCertificate', results);
       setIsLoading(false);
       setNewUser(newUser);
-      renderConfirmationForm()
-      history.push("/")
+      //do a pop up
+      history.push("/Landing")
     } catch (e) {
       onError(e);
       setIsLoading(false);
     }
   }
 
-  function renderConfirmationForm() {
-    return (
-    <h1>Form submitted. If authorized, you will be redirected to the main page.</h1>
-    );
-  }
-
   function renderForm() {
     return (
       <form onSubmit={handleSubmit}>
         <FormGroup controlId="name" bsSize="large">
-          <ControlLabel>Full Name</ControlLabel>
+          <FormLabel>Full Name</FormLabel>
           <FormControl
             autoFocus
             type="name"
@@ -69,7 +70,7 @@ export default function Signup() {
           />
         </FormGroup>
         <FormGroup controlId="license" bsSize="large">
-          <ControlLabel>Driver's License</ControlLabel>
+          <FormLabel>Driver's License</FormLabel>
           <FormControl
             type="license"
             value={fields.license}
