@@ -1,55 +1,58 @@
-// import { RSA } from 'react-native-rsa-native';
-// import { Cookies } from 'react-cookie';
-// import { saveHospital } from 'saveHospital';
+import { RSA } from 'react-native-rsa-native';
+import { Cookies } from 'react-cookie';
+import { saveHospital } from 'saveHospital';
+//https://www.npmjs.com/package/react-native-rsa-native
 
-// let testing = true;
+let testing = true;
 
-// export function generateHealthToken() {
-//     const cookies = new Cookies();
-//     let token = "";
+export function generateHealthToken() {
+    const cookies = new Cookies();
+    let token = "";
 
-//     saveHospital();
+    saveHospital();
 
-//     token = cookies.get('hospitalPublic') + cookies.get('healthPublic');
+    token = cookies.get('hospitalPublic') + cookies.get('healthPublic');
 
-//     console.log('token before encryption: ', token);
+    console.log('token before encryption: ', token);
 
-//     token = RSA.encrypt(token, cookies.get('govPrivate'));
+    //the below ensures that the recipient has gotten the govPublic from the person and so 
+    //has approval to read
+    token = RSA.encrypt(token, cookies.get('govPrivate'));
 
-//     console.log('token after encryption: ', token);
+    console.log('token after encryption: ', token);
 
-//     return token
-// }
+    return token
+}
 
-// export function generateWorkToken() {
-//     const cookies = new Cookies();
-//     let token = "";
+export function generateWorkToken() {
+    const cookies = new Cookies();
+    let token = "";
 
-//     saveHospital();
+    saveHospital();
 
-//     let workPublic = ""
+    let workPublic = ""
 
-//     if (testing) {
-//         workPublic = "sdfsdfsdfsdf";
-//     } else {
-//         workPublic = cookies.get('workPublic');
-//     }
+    if (testing) {
+        workPublic = "sdfsdfsdfsdf";
+    } else {
+        workPublic = cookies.get('workPublic');
+    }
 
-//     token = workPublic + cookies.get('healthPublic');
+    token = workPublic + cookies.get('healthPublic');
 
-//     console.log('token before encryption: ', token);
+    console.log('token before encryption: ', token);
 
-//     token = RSA.encrypt(token, cookies.get('govPrivate'));
+    token = RSA.encrypt(token, cookies.get('govPrivate'));
 
-//     console.log('token after encryption: ', token);
+    console.log('token after encryption: ', token);
 
-//     return token
-// }
+    return token
+}
 
-// export default function generateApprovalToken(request) {
-//     if (request = "health") {
-//         generateHealthToken();
-//     } else if (request = "work") {
-//         generateWorkToken()
-//     }
-// }
+export default function generateApprovalToken(request) {
+    if (request = "health") {
+        generateHealthToken();
+    } else if (request = "work") {
+        generateWorkToken()
+    }
+}

@@ -21,6 +21,11 @@ import generateApprovalToken from '../libs/generateApprovalToken'
 const testingMode = true;
 const cookies = new Cookies()
 
+const style = {
+    width: '250px',
+    height: '250px',
+}
+
 function CreateHealthQR() {
     let approvalToken = "";
     // approvalToken = cookies.get('govCertificate') + generateApprovalToken("health");
@@ -34,7 +39,7 @@ function CreateHealthQR() {
 
     approvalToken = healthPublic + hospitalPublic + govPublic;
 
-    return <QRCode value={approvalToken} />
+    return <QRCode style={style} value={approvalToken} />
 
 }
 
@@ -54,7 +59,7 @@ function CreateWorkQR() {
     approvalToken = workPublic + companyPublic + govPublic;
 
 
-    return <QRCode value={approvalToken} />
+    return <QRCode style={style} value={approvalToken} />
 
 }
 

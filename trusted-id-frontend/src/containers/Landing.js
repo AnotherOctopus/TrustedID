@@ -1,43 +1,45 @@
-import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import React, { useState, Component } from "react";
+import { Button, ButtonGroup } from "react-bootstrap";
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import "./button.css";
 import "./Landing.css";
 import returnQR from "../components/QR-Generator";
-import Webcam from "react-webcam";
-//https://www.npmjs.com/package/react-webcam
+import QrReader from 'react-qr-reader';
 
-const videoConstraints = {
-    width: 150,
-    height: 150,
-    facingMode: "user"//{ exact: "environment" }
-};
+//https://www.npmjs.com/package/react-qr-reader
 
-const WebcamCapture = () => {
-    const webcamRef = React.useRef(null);
 
-    const capture = React.useCallback(
-        () => {
-            const imageSrc = webcamRef.current.getScreenshot();
-        },
-        [webcamRef]
-    );
+class ScanQR extends Component {
+    state = {
+        result: 'No result'
+    }
 
-    return (
-        <>
-            <Webcam
-                audio={false}
-                height={300}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                width={300}
-                videoConstraints={videoConstraints}
-            />
-            <button onClick={capture}>Capture photo</button>
-        </>
-    );
-};
+    handleScan = data => {
+        if (data) {
+            this.setState({
+                result: data
+            })
+        }
+    }
+    handleError = err => {
+        console.error(err)
+    }
+
+    render() {
+        return (
+            <div>
+                <QrReader
+                    delay={300}
+                    onError={this.handleError}
+                    onScan={this.handleScan}
+                    style={{ width: '100%'}}
+                />
+                <p>{this.state.result}</p>
+            </div>
+        )
+    }
+}
 
 export default function Landing() {
     const [qrType, setQrType] = useState("camera");
@@ -51,11 +53,11 @@ export default function Landing() {
 
     function renderPage() {
         return (
-            <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-secondary" onClick={handleChange} value="health">Health</button>
-                <button type="button" class="btn btn-secondary" onClick={handleChange} value="work">Work</button>
-                <button type="button" class="btn btn-secondary" onClick={handleChange} value="camera">Camera</button>
-            </div>
+            <ButtonGroup size="lg">
+                <Button variant="secondary" onClick={handleChange} value="health">Health</Button>
+                <Button variant="secondary" onClick={handleChange} value="work">Work</Button>
+                <Button variant="secondary" onClick={handleChange} value="camera">Camera</Button>
+            </ButtonGroup>
         );
     }
 
@@ -66,15 +68,16 @@ export default function Landing() {
         } else if (qrType === "work") {
             result = returnQR(qrType);
         } else {
-            result = <WebcamCapture />;
+            //result = <WebcamCapture />;
+            result = <ScanQR />
         }
         return result
     }
 
     return (
-        <div>
-            {renderPage()}
-            <div className='box'>{qrOrWebcam()}</div>
+        <div className='main'>
+            <div className="menu">{renderPage()}</div>
+            <div className="content">{qrOrWebcam()}</div>
         </div>
     );
 }
